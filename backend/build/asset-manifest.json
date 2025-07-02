@@ -1,7 +1,8 @@
 {
   "files": {
     "main.css": "/static/css/main.43b763cf.css",
-    "main.js": "/static/js/main.0fa3a891.js",
+    "main.js": "/static/js/main.ddfbb7f0.js",
+    "static/media/logo.png": "/static/media/logo.e7af006ddd261411fa77.png",
     "static/media/flagman.svg": "/static/media/flagman.f64832fac4412a8840aed52a7b5b8fa7.svg",
     "static/media/roboto-latin-700-normal.woff2": "/static/media/roboto-latin-700-normal.4535474e1cf8598695ad.woff2",
     "static/media/roboto-latin-500-normal.woff2": "/static/media/roboto-latin-500-normal.7077203b1982951ecf76.woff2",
@@ -18,6 +19,7 @@
     "static/media/roboto-cyrillic-ext-300-normal.woff": "/static/media/roboto-cyrillic-ext-300-normal.795dbc8140e3fef82983.woff",
     "static/media/roboto-cyrillic-ext-400-normal.woff": "/static/media/roboto-cyrillic-ext-400-normal.135d076fa32aa0b4d105.woff",
     "static/media/roboto-cyrillic-ext-500-normal.woff": "/static/media/roboto-cyrillic-ext-500-normal.c0a0638f90b31d6454ba.woff",
+    "static/media/logo-with-text.png": "/static/media/logo-with-text.81f579e4e26928662a12.png",
     "static/media/roboto-cyrillic-ext-700-normal.woff": "/static/media/roboto-cyrillic-ext-700-normal.ca247189fc12d00de361.woff",
     "static/media/roboto-latin-ext-400-normal.woff2": "/static/media/roboto-latin-ext-400-normal.2eeae187764baf05867d.woff2",
     "static/media/roboto-latin-ext-300-normal.woff2": "/static/media/roboto-latin-ext-300-normal.97cbc447d4a8d41a9543.woff2",
@@ -61,10 +63,10 @@
     "static/media/roboto-greek-ext-400-normal.woff": "/static/media/roboto-greek-ext-400-normal.16eb83b4a3b1ea994243.woff",
     "index.html": "/index.html",
     "main.43b763cf.css.map": "/static/css/main.43b763cf.css.map",
-    "main.0fa3a891.js.map": "/static/js/main.0fa3a891.js.map"
+    "main.ddfbb7f0.js.map": "/static/js/main.ddfbb7f0.js.map"
   },
   "entrypoints": [
     "static/css/main.43b763cf.css",
-    "static/js/main.0fa3a891.js"
+    "static/js/main.ddfbb7f0.js"
   ]
 }

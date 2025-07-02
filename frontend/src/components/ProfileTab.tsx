@@ -51,7 +51,7 @@ const ProfileTab = ({ open, anchorEl, popperRef, handleClose }: Props) => {
                 height: "45px",
                 fontSize: "16px",
                 fontWeight: 500,
-                backgroundColor: colors.blue1,
+                backgroundColor: colors.primary,
                 color: colors.white,
               }}
             >

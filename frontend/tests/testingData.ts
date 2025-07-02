@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
 
-export const DEV_URL = "https://raksh-vest-vault.vercel.app/";
+export const DEV_URL = "https://raksh-rupee-jar.vercel.app/";
 export const NEXT_STEP_BUTTON = "SubmitBtn";
 
 export interface TestData {

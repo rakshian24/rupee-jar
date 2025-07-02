@@ -11,7 +11,7 @@ import { useAuth } from "../context/authContext";
 import { colors } from "../constants";
 import { getInitials } from "../utils";
 import ProfileTab from "./ProfileTab";
-import { FaVault } from "react-icons/fa6";
+import logo from "../assets/pngs/logo.png"
 
 const Header = () => {
   const { user } = useAuth();
@@ -46,15 +46,15 @@ const Header = () => {
         py: 2,
         boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px;",
         position: "sticky",
-        bgcolor: colors.bg1,
+        bgcolor: colors.white,
       }}
     >
       <Link to={"/"}>
         <Box>
           <Box display="flex" alignItems="center" gap={1.5}>
-            <FaVault size={35} color={colors.blue1} />
-            <Typography variant="h5" fontWeight="bold" color={colors.white}>
-              VestVault
+            <img src={logo} alt="logo" width={40} />
+            <Typography variant="h5" fontWeight="bold" color={colors.primary}>
+              RupeeJar
             </Typography>
           </Box>
         </Box>
@@ -68,7 +68,7 @@ const Header = () => {
                 height: "40px",
                 fontSize: "16px",
                 fontWeight: 500,
-                backgroundColor: colors.blue1,
+                backgroundColor: colors.primary,
                 color: colors.white,
                 cursor: "pointer",
               }}

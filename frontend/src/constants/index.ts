@@ -27,7 +27,7 @@ export const colors = {
   contentTertiary: "#6B6B6B",
   contentSecondary: "#545454",
 
-  primary: "#faf6ea",
+  primary: "#36c68e",
   secondary: "#285e86",
   tertiary: "#57697a",
   lightBrown: "#87746e",

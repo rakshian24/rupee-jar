@@ -1,8 +1,8 @@
-import { Box, Stack, Typography, useMediaQuery } from "@mui/material";
+import { Box, Stack, useMediaQuery } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import { ReactComponent as Flagman } from "../../assets/svgs/flagman.svg";
 import { colors, screenSize } from "../../constants";
-import Logo from "../../components/SvgComponent/Logo";
+import logo from "../../assets/pngs/logo-with-text.png";
 
 const Home = () => {
   const isTablet = useMediaQuery(`(max-width:${screenSize.tablet})`);
@@ -10,9 +10,9 @@ const Home = () => {
   return (
     <Stack direction={"row"} height={"100%"}>
       {!isTablet && (
-        <Stack width={"50%"} px={6} py={3} bgcolor={colors.primary}>
+        <Stack width={"50%"} px={6} py={3} bgcolor={colors.lightGrey}>
           <Box>
-            <Logo width="200px" bgColor={colors.primary} />
+            <img src={logo} width={150} alt="logo" />
           </Box>
           <Box
             display={"flex"}
@@ -40,7 +40,7 @@ const Home = () => {
               display={"flex"}
               alignItems={"center"}
             >
-              <Logo width="200px" />
+              <img src={logo} width={150} alt="logo" />
             </Stack>
           )}
           <Outlet />
