@@ -1,0 +1,44 @@
+{
+  "name": "vest-vault-be",
+  "version": "1.0.0",
+  "description": "A job portal which connects freelancers and employers - Intuit Assessment Project",
+  "main": "index.ts",
+  "scripts": {
+    "start": "ts-node backend/index.ts",
+    "server": "nodemon backend/index.ts",
+    "server:prod": "NODE_ENV=production nodemon backend/index.ts",
+    "client": "npm start --prefix frontend",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "prod": "concurrently \"npm run server:prod\" \"npm run client\""
+  },
+  "keywords": [],
+  "author": "Rakshith Sindhiya R",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server-errors": "^3.3.0",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.3",
+    "express": "^4.19.2",
+    "graphql": "^16.9.0",
+    "graphql-tag": "^2.12.6",
+    "graphql-yoga": "^5.1.1",
+    "jsonwebtoken": "^8.2.1",
+    "moment": "^2.30.1",
+    "mongoose": "^6.0.14",
+    "nodemon": "^2.0.15",
+    "validator": "^13.11.0"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.2",
+    "@graphql-codegen/typescript": "^4.0.9",
+    "@graphql-codegen/typescript-resolvers": "^4.2.1",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/node": "^22.2.0",
+    "@types/validator": "^13.12.0",
+    "concurrently": "^8.2.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
+  }
+}
