@@ -4,7 +4,7 @@ export interface IAccount extends Document {
   user: Types.ObjectId;
   accountNumber: string;
   bankName: string;
-  balance?: number;
+  balance: number;
 }
 
 const accountSchema = new Schema(
@@ -18,7 +18,7 @@ const accountSchema = new Schema(
       type: String,
       required: [true, "Bank name is required!"],
     },
-    balance: { type: Number, default: 0 },
+    balance: { type: Number, required: true },
   },
   {
     timestamps: true,
