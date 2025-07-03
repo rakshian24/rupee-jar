@@ -1,8 +1,9 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Document, Schema, Types } from "mongoose";
 import bcrypt from "bcryptjs";
 import validator from "validator";
 
 export interface IUser extends Document {
+  accounts: Types.ObjectId[];
   username: string;
   email: string;
   password: string;
@@ -14,6 +15,7 @@ export interface IUser extends Document {
 
 const userSchema = new Schema(
   {
+    accounts: [{ type: Types.ObjectId, ref: "Account" }],
     username: {
       type: String,
       required: [true, "User name is required!"],
