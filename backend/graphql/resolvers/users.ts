@@ -20,8 +20,8 @@ const resolvers = {
     async registerUser(
       _: unknown,
       {
-        registerInput: { username, email, password, confirmPassword },
-      }: { registerInput: RegisterInput },
+        input: { username, email, password, confirmPassword },
+      }: { input: RegisterInput },
       ctx: any
     ): Promise<{ user: IUser; token: string }> {
       const userExists = await User.findOne({ email });
@@ -49,7 +49,7 @@ const resolvers = {
 
     async loginUser(
       _: unknown,
-      { loginInput: { email, password } }: { loginInput: LoginInput },
+      { input: { email, password } }: { input: LoginInput },
       ctx: any
     ): Promise<{ user: IUser; token: string }> {
       const user = (await User.findOne({ email })) as IUser;
@@ -77,23 +77,6 @@ const resolvers = {
       }
 
       const user = (await User.findById(userId)) as IUser;
-
-      return user;
-    },
-
-    async user(
-      _: unknown,
-      { id }: { id: string },
-      ctx: any
-    ): Promise<IUser | null> {
-      const loggedInUserId = getLoggedInUserId(ctx);
-      const userId = loggedInUserId?.userId;
-
-      if (!userId) {
-        throw new ApolloError("User not authenticated", "NOT_AUTHENTICATED");
-      }
-
-      const user = (await User.findById(id)) as IUser;
 
       return user;
     },

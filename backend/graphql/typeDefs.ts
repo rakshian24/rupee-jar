@@ -13,6 +13,7 @@ export const typeDefs = gql`
     _id: ID!
     username: String
     email: String
+    accounts: [Account]
   }
 
   type AuthResponse {
@@ -21,34 +22,38 @@ export const typeDefs = gql`
   }
 
   type Account {
-    accountNumber: Int!
+    _id: ID!
+    accountNumber: String!
     bankName: String!
     balance: Float!
-    user: User!
+    userId: ID!
   }
 
   type Category {
+    _id: ID!
     name: String!
     icon: String
     color: String
     type: TransactionType!
-    user: User!
+    userId: ID!
   }
 
   type Budget {
-    user: User!
-    category: Category!
+    _id: ID!
+    userId: ID!
+    categoryId: ID!
     month: Int!
     year: Int!
     limit: Float!
   }
 
   type Transaction {
-    user: User!
+    _id: ID!
+    userId: ID!
     type: TransactionType!
     amount: Float!
-    category: Category!
-    account: Account!
+    categoryId: ID!
+    accountId: ID!
     description: String!
     receiptImageUrl: String!
     date: String!
@@ -67,14 +72,12 @@ export const typeDefs = gql`
   }
 
   input AccountInput {
-    user: ID!
-    accountNumber: Int!
+    accountNumber: String!
     bankName: String!
     balance: Float!
   }
 
   input CategoryInput {
-    user: ID!
     name: String!
     icon: String
     color: String
@@ -82,7 +85,6 @@ export const typeDefs = gql`
   }
 
   input BudgetInput {
-    user: ID!
     category: ID!
     month: Int!
     year: Int!
@@ -90,7 +92,6 @@ export const typeDefs = gql`
   }
 
   input TransactionInput {
-    user: ID!
     type: TransactionType!
     amount: Float!
     category: ID!
@@ -104,7 +105,7 @@ export const typeDefs = gql`
     me: User
 
     getAccount(id: ID!): Account
-    getAccounts(ids: [ID!]!): [Account]
+    getAllAccounts: [Account]
 
     getTransaction(id: ID!): Transaction
     getTransactions(ids: [ID!]!): [Transaction]
@@ -117,8 +118,8 @@ export const typeDefs = gql`
   }
 
   type Mutation {
-    registerUser(registerInput: RegisterInput): AuthResponse
-    loginUser(loginInput: LoginInput): AuthResponse
+    registerUser(input: RegisterInput): AuthResponse
+    loginUser(input: LoginInput): AuthResponse
     createAccount(input: AccountInput): Account
     createCategory(input: CategoryInput): Category
     createBudget(input: BudgetInput): Budget
