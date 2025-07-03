@@ -6,11 +6,11 @@ export enum TransactionType {
 }
 
 export interface ITransaction extends Document {
-  user: Types.ObjectId;
+  userId: Types.ObjectId;
   type: TransactionType;
   amount: string;
-  category: Types.ObjectId;
-  account: Types.ObjectId;
+  categoryId: Types.ObjectId;
+  accountId: Types.ObjectId;
   description: string;
   receiptImageUrl?: string;
   date?: Date;
@@ -18,15 +18,15 @@ export interface ITransaction extends Document {
 
 const transactionSchema = new Schema(
   {
-    user: { type: Types.ObjectId, ref: "User", required: true },
+    userId: { type: Types.ObjectId, ref: "User", required: true },
     type: {
       type: String,
       enum: Object.values(TransactionType),
       required: true,
     },
     amount: { type: Number, required: true },
-    category: { type: Types.ObjectId, ref: "Category", required: true },
-    account: { type: Types.ObjectId, ref: "Account", required: true },
+    categoryId: { type: Types.ObjectId, ref: "Category", required: true },
+    accountId: { type: Types.ObjectId, ref: "Account", required: true },
     description: {
       type: String,
       required: [true, "Transaction description is required!"],

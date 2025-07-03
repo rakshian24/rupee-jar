@@ -2,7 +2,7 @@ import mongoose, { Document, Schema, Types } from "mongoose";
 import { TransactionType } from "./Transaction";
 
 export interface ICategory extends Document {
-  user: Types.ObjectId;
+  userId: Types.ObjectId;
   name: string;
   icon?: string;
   color?: string;
@@ -11,7 +11,7 @@ export interface ICategory extends Document {
 
 const categorySchema = new Schema(
   {
-    user: { type: Types.ObjectId, ref: "User", required: true },
+    userId: { type: Types.ObjectId, ref: "User", required: true },
     name: {
       type: String,
       required: [true, "Category name is required!"],

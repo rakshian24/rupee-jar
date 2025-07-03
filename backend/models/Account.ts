@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema, Types } from "mongoose";
 
 export interface IAccount extends Document {
-  user: Types.ObjectId;
+  userId: Types.ObjectId;
   accountNumber: string;
   bankName: string;
   balance: number;
@@ -9,7 +9,7 @@ export interface IAccount extends Document {
 
 const accountSchema = new Schema(
   {
-    user: { type: Types.ObjectId, ref: "User", required: true },
+    userId: { type: Types.ObjectId, ref: "User", required: true },
     accountNumber: {
       type: String,
       required: [true, "Account number is required!"],
@@ -24,6 +24,9 @@ const accountSchema = new Schema(
     timestamps: true,
   }
 );
+
+// Make accountNumber unique per user
+accountSchema.index({ userId: 1, accountNumber: 1 }, { unique: true });
 
 const Account = mongoose.model<IAccount>("Account", accountSchema);
 
