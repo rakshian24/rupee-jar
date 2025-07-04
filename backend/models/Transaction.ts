@@ -5,15 +5,21 @@ export enum TransactionType {
   EXPENSE = "EXPENSE",
 }
 
+export enum PaymentMethod {
+  UPI = "UPI",
+  CASH = "CASH",
+}
+
 export interface ITransaction extends Document {
   userId: Types.ObjectId;
   type: TransactionType;
+  paymentMethod: PaymentMethod;
   amount: string;
   categoryId: Types.ObjectId;
   accountId: Types.ObjectId;
   description: string;
   receiptImageUrl?: string;
-  date?: Date;
+  date?: string;
 }
 
 const transactionSchema = new Schema(
@@ -22,6 +28,11 @@ const transactionSchema = new Schema(
     type: {
       type: String,
       enum: Object.values(TransactionType),
+      required: true,
+    },
+    paymentMethod: {
+      type: String,
+      enum: Object.values(PaymentMethod),
       required: true,
     },
     amount: { type: Number, required: true },

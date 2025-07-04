@@ -9,6 +9,11 @@ export const typeDefs = gql`
     EXPENSE
   }
 
+  enum PaymentMethod {
+    UPI
+    CASH
+  }
+
   type User {
     _id: ID!
     username: String
@@ -36,14 +41,19 @@ export const typeDefs = gql`
     color: String
     type: TransactionType!
     userId: ID!
+    description: String
+    budgetLimit: Float!
+  }
+
+  type CategoryWithBudget {
+    category: Category!
+    budget: Budget!
   }
 
   type Budget {
     _id: ID!
     userId: ID!
     categoryId: ID!
-    month: Int!
-    year: Int!
     limit: Float!
   }
 
@@ -51,12 +61,13 @@ export const typeDefs = gql`
     _id: ID!
     userId: ID!
     type: TransactionType!
+    paymentMethod: PaymentMethod!
     amount: Float!
     categoryId: ID!
     accountId: ID!
     description: String!
     receiptImageUrl: String!
-    date: String!
+    date: DateTime!
   }
 
   input RegisterInput {
@@ -82,20 +93,29 @@ export const typeDefs = gql`
     icon: String
     color: String
     type: TransactionType!
+    description: String
   }
 
   input BudgetInput {
-    category: ID!
-    month: Int!
-    year: Int!
+    categoryId: ID!
     limit: Float!
+  }
+
+  input CategoryWithBudgetInput {
+    name: String!
+    icon: String
+    color: String
+    type: TransactionType!
+    budgetLimit: Float!
+    description: String
   }
 
   input TransactionInput {
     type: TransactionType!
+    paymentMethod: PaymentMethod!
     amount: Float!
-    category: ID!
-    account: ID!
+    categoryId: ID!
+    accountId: ID!
     description: String!
     receiptImageUrl: String
     date: String!
@@ -107,22 +127,30 @@ export const typeDefs = gql`
     getAccount(id: ID!): Account
     getAllAccounts: [Account]
 
+    getCategoryByType(id: ID!, type: TransactionType!): Category
+    getAllCategoriesByType(type: TransactionType!): [Category]
+    getAllCategoriesByTypeWithBudgetDetails(type: TransactionType!): [Category]
+
     getTransaction(id: ID!): Transaction
-    getTransactions(ids: [ID!]!): [Transaction]
+    getAllTransactions: [Transaction]
 
-    getCategory(id: ID!): Category
-    getCategories(ids: [ID!]!): [Category]
-
-    getBudget(id: ID!): Budget
-    getBudgets(ids: [ID!]!): [Budget]
+    getBudgetByCategoryId(categoryId: ID!): Budget
   }
 
   type Mutation {
     registerUser(input: RegisterInput): AuthResponse
     loginUser(input: LoginInput): AuthResponse
+
     createAccount(input: AccountInput): Account
+
     createCategory(input: CategoryInput): Category
+
+    createCategoryWithBudget(
+      input: CategoryWithBudgetInput!
+    ): CategoryWithBudget!
+
     createBudget(input: BudgetInput): Budget
+
     createTransaction(input: TransactionInput): Transaction
   }
 `;
