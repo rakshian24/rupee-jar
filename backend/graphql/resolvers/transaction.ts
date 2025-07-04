@@ -6,6 +6,7 @@ import Transaction, {
   PaymentMethod,
 } from "../../models/Transaction";
 import { Types } from "mongoose";
+import Category from "../../models/Category";
 
 interface TransactionInput {
   type: TransactionType;
@@ -41,6 +42,19 @@ const resolvers = {
 
       if (!userId) {
         throw new ApolloError("User not authenticated", "NOT_AUTHENTICATED");
+      }
+
+      const category = await Category.findOne({ _id: categoryId, userId });
+
+      if (!category) {
+        throw new ApolloError("Category not found", "CATEGORY_NOT_FOUND");
+      }
+
+      if (category.type !== type) {
+        throw new ApolloError(
+          `Category type mismatch. Expected: ${type}, Found: ${category.type}`,
+          "CATEGORY_TYPE_MISMATCH"
+        );
       }
 
       const newTransaction = new Transaction({
