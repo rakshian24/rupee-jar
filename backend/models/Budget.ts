@@ -1,11 +1,8 @@
 import mongoose, { Document, Schema, Types } from "mongoose";
-import { TransactionType } from "./Transaction";
 
 export interface IBudget extends Document {
   userId: Types.ObjectId;
   categoryId: Types.ObjectId;
-  month: number;
-  year: number;
   limit: number;
 }
 
@@ -13,8 +10,6 @@ const budgetSchema = new Schema(
   {
     userId: { type: Types.ObjectId, ref: "User", required: true },
     categoryId: { type: Types.ObjectId, ref: "Category", required: true },
-    month: { type: Number, required: true },
-    year: { type: Number, required: true },
     limit: { type: Number, required: true },
   },
   {

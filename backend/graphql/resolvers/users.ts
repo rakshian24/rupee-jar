@@ -2,12 +2,18 @@ import { ApolloError } from "apollo-server-errors";
 import User, { IUser } from "../../models/User";
 import getLoggedInUserId from "../../middleware/getLoggedInUserId";
 import { generateToken } from "../../utils";
+import Account, { IAccount } from "../../models/Account";
+import { Document } from "mongoose";
 
 interface RegisterInput {
   username: string;
   email: string;
   password: string;
   confirmPassword: string;
+}
+
+interface IUserWithAccounts extends Omit<IUser, keyof Document> {
+  accounts: IAccount[];
 }
 
 interface LoginInput {
@@ -23,7 +29,7 @@ const resolvers = {
         input: { username, email, password, confirmPassword },
       }: { input: RegisterInput },
       ctx: any
-    ): Promise<{ user: IUser; token: string }> {
+    ): Promise<{ user: IUserWithAccounts; token: string }> {
       const userExists = await User.findOne({ email });
 
       if (userExists) {
@@ -41,8 +47,20 @@ const resolvers = {
       });
 
       const token = await generateToken(newUser);
-      const res = (await newUser.save()) as IUser;
-      const response = { user: res, token };
+      const savedUser = (await newUser.save()) as IUser;
+
+      // Get associated accounts
+      const accounts = await Account.find({ userId: savedUser._id });
+
+      const userWithAccountDetails: IUserWithAccounts = {
+        ...(savedUser.toObject() as IUser),
+        accounts,
+      };
+
+      const response = {
+        user: userWithAccountDetails,
+        token,
+      };
 
       return response;
     },
@@ -51,20 +69,32 @@ const resolvers = {
       _: unknown,
       { input: { email, password } }: { input: LoginInput },
       ctx: any
-    ): Promise<{ user: IUser; token: string }> {
+    ): Promise<{ user: IUserWithAccounts; token: string }> {
       const user = (await User.findOne({ email })) as IUser;
 
-      if (user && (await user.matchPassword(password))) {
-        const token = await generateToken(user);
-        const response = { user, token };
-
-        return response;
-      } else {
+      if (!user || !(await user.matchPassword(password))) {
         throw new ApolloError(
-          `Invalid email or password`,
-          "INVALID_EMAIL_OR_PASSWORD"
+          "Invalid email or password",
+          "INVALID_CREDENTIALS"
         );
       }
+
+      const token = await generateToken(user);
+
+      // Get associated accounts
+      const accounts = await Account.find({ userId: user._id });
+
+      const userWithAccountDetails: IUserWithAccounts = {
+        ...(user.toObject() as IUser),
+        accounts,
+      };
+
+      const response = {
+        user: userWithAccountDetails,
+        token,
+      };
+
+      return response;
     },
   },
   Query: {
