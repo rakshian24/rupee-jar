@@ -21,7 +21,7 @@ function App() {
 
   return (
     <Stack sx={{ height: "100vh", minHeight: "100vh", margin: 0 }}>
-      {!isTablet && isLoggedIn && <Header />}
+      <Header />
       <Stack
         sx={{
           height: "100%",

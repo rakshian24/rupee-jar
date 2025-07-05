@@ -47,7 +47,7 @@ const Register = () => {
   const onSubmitHandler = async (formValues: IRegisterFormValueTypes) => {
     const { data } = await registerUser({
       variables: {
-        registerInput: {
+        input: {
           ...formValues,
         },
       },

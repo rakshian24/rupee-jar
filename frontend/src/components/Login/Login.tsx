@@ -43,7 +43,7 @@ const Login = () => {
   const onSubmitHandler = async (formValues: ILoginFormValueTypes) => {
     const { data } = await registerUser({
       variables: {
-        loginInput: { ...formValues },
+        input: { ...formValues },
       },
     });
     if (data?.loginUser?.token) {

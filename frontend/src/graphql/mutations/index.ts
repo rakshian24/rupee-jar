@@ -1,8 +1,8 @@
 import gql from "graphql-tag";
 
 export const REGISTER_USER_MUTATION = gql`
-  mutation Mutation($registerInput: RegisterInput) {
-    registerUser(registerInput: $registerInput) {
+  mutation Mutation($input: RegisterInput) {
+    registerUser(input: $input) {
       token
       user {
         _id
@@ -14,25 +14,14 @@ export const REGISTER_USER_MUTATION = gql`
 `;
 
 export const LOGIN_MUTATION = gql`
-  mutation Mutation($loginInput: LoginInput) {
-    loginUser(loginInput: $loginInput) {
+  mutation Mutation($input: LoginInput) {
+    loginUser(input: $input) {
       token
       user {
         _id
         email
         username
       }
-    }
-  }
-`;
-
-export const CREATE_TODO = gql`
-  mutation Mutation($todoInput: TodoInput) {
-    createTodo(todoInput: $todoInput) {
-      _id
-      title
-      description
-      isCompleted
     }
   }
 `;
