@@ -8,37 +8,16 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import AddIcon from "@mui/icons-material/Add";
-import HistoryIcon from "@mui/icons-material/History";
-import BarChartIcon from "@mui/icons-material/BarChart";
-import CategoryIcon from "@mui/icons-material/Category";
-import SettingsIcon from "@mui/icons-material/Settings";
 import { APP_NAME, colors, ROUTES } from "../../constants";
 import logo from "../../assets/pngs/logo.png";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/authContext";
+import useMenuItemsList from "../../hooks/useMenuItems";
 
 const drawerWidth = 240;
 
-const menuItems = [
-  { text: "Dashboard", icon: <DashboardIcon />, path: ROUTES.DASHBOARD },
-  { text: "Add Transaction", icon: <AddIcon />, path: ROUTES.ADD_TRANSACTION },
-  {
-    text: "Transaction History",
-    icon: <HistoryIcon />,
-    path: ROUTES.TRANSACTION_HISTORY,
-  },
-  { text: "Categories", icon: <CategoryIcon />, path: ROUTES.CATEGORIES },
-  {
-    text: "Reports & Analytics",
-    icon: <BarChartIcon />,
-    path: ROUTES.REPORTS,
-  },
-  { text: "Settings", icon: <SettingsIcon />, path: ROUTES.SETTINGS },
-];
-
 export const LeftNav = () => {
+  const menuItems = useMenuItemsList();
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();

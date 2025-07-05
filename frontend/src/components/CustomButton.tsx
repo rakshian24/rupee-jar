@@ -44,10 +44,10 @@ const Button = ({
           ? "10px 24px 10px 16px"
           : "10px 24px",
         boxShadow: "none",
-        bgcolor: colors.brown,
+        bgcolor: colors.lightGreen,
         color: colors.white,
         "&:hover": {
-          bgcolor: colors.lightBrown,
+          bgcolor: colors.lightGreenDark,
           boxShadow: "none",
         },
         "&:disabled": {

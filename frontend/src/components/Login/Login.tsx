@@ -11,7 +11,7 @@ import { ILoginFormValueTypes, InitialLoginFormValues } from "./helpers";
 import { emailRegex, textInputRegex } from "../../utils";
 import CustomInput from "../CustomInput";
 import { Link, useNavigate } from "react-router-dom";
-import { ROUTES, screenSize } from "../../constants";
+import { colors, ROUTES, screenSize } from "../../constants";
 import { useMutation } from "@apollo/client";
 import { useAuth } from "../../context/authContext";
 import { LOGIN_MUTATION } from "../../graphql/mutations";
@@ -124,6 +124,7 @@ const Login = () => {
                   style={{
                     marginLeft: "4px",
                     fontWeight: 500,
+                    color: colors.lightGreen,
                   }}
                 >
                   Register here
