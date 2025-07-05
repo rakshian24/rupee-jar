@@ -8,10 +8,10 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/authContext";
-import { colors } from "../constants";
+import { APP_NAME, colors } from "../constants";
 import { getInitials } from "../utils";
 import ProfileTab from "./ProfileTab";
-import logo from "../assets/pngs/logo.png"
+import logo from "../assets/pngs/logo.png";
 
 const Header = () => {
   const { user } = useAuth();
@@ -51,10 +51,14 @@ const Header = () => {
     >
       <Link to={"/"}>
         <Box>
-          <Box display="flex" alignItems="center" gap={1.5}>
-            <img src={logo} alt="logo" width={40} />
-            <Typography variant="h5" fontWeight="bold" color={colors.primary}>
-              RupeeJar
+          <Box display="flex" alignItems="center" gap={1}>
+            <img src={logo} alt="logo" width={28} />
+            <Typography
+              fontWeight="500"
+              color={colors.primary}
+              fontSize={"20px"}
+            >
+              {APP_NAME}
             </Typography>
           </Box>
         </Box>

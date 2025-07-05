@@ -1,27 +1,40 @@
-import { Box, Stack, useMediaQuery } from "@mui/material";
-import { Outlet } from "react-router-dom";
-import { ReactComponent as Flagman } from "../../assets/svgs/flagman.svg";
-import { colors, screenSize } from "../../constants";
-import logo from "../../assets/pngs/logo-with-text.png";
+import { Stack, Typography, useMediaQuery } from "@mui/material";
+import { Outlet, useLocation } from "react-router-dom";
+import { APP_NAME, colors, ROUTES, screenSize } from "../../constants";
+import happyPig from "../../assets/pngs/happy-pig.png";
+import Features from "../../components/Register/Features";
 
 const Home = () => {
   const isTablet = useMediaQuery(`(max-width:${screenSize.tablet})`);
+  const { pathname } = useLocation();
+  const isCurrentPathLogin = pathname === ROUTES.LOGIN;
 
   return (
     <Stack direction={"row"} height={"100%"}>
       {!isTablet && (
-        <Stack width={"50%"} px={6} py={3} bgcolor={colors.lightGrey}>
-          <Box>
-            <img src={logo} width={150} alt="logo" />
-          </Box>
-          <Box
-            display={"flex"}
-            alignItems={"center"}
-            justifyContent={"center"}
-            height={"100%"}
-          >
-            <Flagman width="100%" height={"500px"} />
-          </Box>
+        <Stack width={"65%"} px={6} py={3} bgcolor={colors.lightGrey}>
+          <Stack gap={6}>
+            <Stack gap={2} justifyContent={"center"} alignItems={"center"}>
+              <img src={happyPig} alt="happy-pig" width={300} />
+              <Stack gap={0.5} textAlign={"center"}>
+                <Typography
+                  fontWeight={600}
+                  fontSize={"28px"}
+                  color={colors.primary}
+                >
+                  {isCurrentPathLogin
+                    ? `Welcome to ${APP_NAME}`
+                    : `Join ${APP_NAME} today`}
+                </Typography>
+                <Typography fontSize={"16px"} color={colors.contentSecondary}>
+                  {isCurrentPathLogin
+                    ? "Your personal finance companion"
+                    : "Take control of your finances"}
+                </Typography>
+              </Stack>
+            </Stack>
+            <Features />
+          </Stack>
         </Stack>
       )}
       <Stack
@@ -40,7 +53,7 @@ const Home = () => {
               display={"flex"}
               alignItems={"center"}
             >
-              <img src={logo} width={150} alt="logo" />
+              <img src={happyPig} width={150} alt="logo" />
             </Stack>
           )}
           <Outlet />

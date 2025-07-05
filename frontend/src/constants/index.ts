@@ -1,5 +1,7 @@
 export const APP_TOKEN_KEY = "rakshAppToken";
 
+export const APP_NAME = "RupeeJar";
+
 export const screenSize = {
   mobile: "600px",
   tablet: "900px",
