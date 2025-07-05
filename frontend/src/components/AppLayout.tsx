@@ -27,8 +27,9 @@ export const AppLayout = () => {
           flexGrow: 1,
           bgcolor: colors.grey1,
           p: isTablet ? 2 : 3,
-          height: isTablet ? "calc(100vh - 56px - 56px)" : "100vh", // minus TopBar + BottomNav
+          height: !isTablet ? "calc(100vh - 120px)" : "100vh",
           overflowY: "auto",
+          mb: isTablet ? "56px" : "0px",
         }}
       >
         <Outlet />
