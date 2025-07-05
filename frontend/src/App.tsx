@@ -8,7 +8,6 @@ import Register from "./components/Register/Register";
 import Login from "./components/Login/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./pages/dashboard";
-import Footer from "./components/Footer/Footer";
 import Profile from "./pages/profile";
 import { AppLayout } from "./components/AppLayout";
 import AddTransaction from "./pages/addTransaction";
@@ -23,7 +22,7 @@ function App() {
 
   return (
     <Stack sx={{ height: "100vh", minHeight: "100vh", margin: 0 }}>
-      <Header />
+      {(!isTablet || (isTablet && !isLoggedIn)) && <Header />}
       <Stack
         sx={{
           height: "100%",
@@ -60,7 +59,6 @@ function App() {
           </Route>
         </Routes>
       </Stack>
-      {isTablet && isLoggedIn && <Footer userInfo={user} />}
     </Stack>
   );
 }

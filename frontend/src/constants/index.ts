@@ -47,4 +47,6 @@ export const colors = {
   primaryBtnColor: "#4E46E5",
   grey1: "#F3F4F6",
   lightGrey1: "#f8f9fa",
+  lightGreen: "#2AAC75",
+  lightGreenDark: "#239963",
 };
