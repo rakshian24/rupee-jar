@@ -10,7 +10,7 @@ const Home = () => {
   const isCurrentPathLogin = pathname === ROUTES.LOGIN;
 
   return (
-    <Stack direction={"row"} height={"100%"}>
+    <Stack direction={"row"} height={"100%"} mb={isTablet ? 10 : 0}>
       {!isTablet && (
         <Stack width={"65%"} px={6} py={3} bgcolor={colors.lightGrey}>
           <Stack gap={6}>
