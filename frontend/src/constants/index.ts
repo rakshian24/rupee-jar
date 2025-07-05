@@ -13,6 +13,11 @@ export const ROUTES = {
   LOGIN: "/login",
   LOGOUT: "/logout",
   DASHBOARD: "/dashboard",
+  ADD_TRANSACTION: "/add-transaction",
+  TRANSACTION_HISTORY: "/transaction-history",
+  CATEGORIES: "/categories",
+  REPORTS: "/reports",
+  SETTINGS: "/settings",
   PROFILE: "/profile",
 };
 
@@ -40,4 +45,6 @@ export const colors = {
   blue1: "#6366f1",
   bg1: "#1C283A",
   primaryBtnColor: "#4E46E5",
+  grey1: "#F3F4F6",
+  lightGrey1: "#f8f9fa",
 };
