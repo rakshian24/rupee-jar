@@ -8,6 +8,13 @@ export const REGISTER_USER_MUTATION = gql`
         _id
         username
         email
+        accounts {
+          _id
+          accountNumber
+          bankName
+          balance
+          userId
+        }
       }
     }
   }
@@ -21,7 +28,26 @@ export const LOGIN_MUTATION = gql`
         _id
         email
         username
+        accounts {
+          _id
+          accountNumber
+          bankName
+          balance
+          userId
+        }
       }
+    }
+  }
+`;
+
+export const CREATE_ACCOUNT_MUTATION = gql`
+  mutation Mutation($input: AccountInput) {
+    createAccount(input: $input) {
+      _id
+      accountNumber
+      bankName
+      balance
+      userId
     }
   }
 `;

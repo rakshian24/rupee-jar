@@ -39,10 +39,7 @@ function App() {
           {/* Protected Routes wrapped in ProtectedRoute and AppLayout */}
           <Route element={<ProtectedRoute />}>
             <Route element={<AppLayout />}>
-              <Route
-                path={ROUTES.DASHBOARD}
-                element={<Dashboard userInfo={user} />}
-              />
+              <Route path={ROUTES.DASHBOARD} element={<Dashboard />} />
               <Route
                 path={ROUTES.ADD_TRANSACTION}
                 element={<AddTransaction />}

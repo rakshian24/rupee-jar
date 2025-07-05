@@ -8,10 +8,21 @@ import React, {
   ReactNode,
 } from "react";
 
+interface Account {
+  _id: string;
+  userId: string;
+  accountNumber: string;
+  bankName: string;
+  balance: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface User {
   userId: string;
   email: string;
   username: string;
+  accounts: Account[];
 }
 
 interface AuthContextProps {
