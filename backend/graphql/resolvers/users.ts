@@ -46,7 +46,6 @@ const resolvers = {
         confirmPassword,
       });
 
-      const token = await generateToken(newUser);
       const savedUser = (await newUser.save()) as IUser;
 
       // Get associated accounts
@@ -56,6 +55,8 @@ const resolvers = {
         ...(savedUser.toObject() as IUser),
         accounts,
       };
+
+      const token = await generateToken(userWithAccountDetails);
 
       const response = {
         user: userWithAccountDetails,
@@ -79,8 +80,6 @@ const resolvers = {
         );
       }
 
-      const token = await generateToken(user);
-
       // Get associated accounts
       const accounts = await Account.find({ userId: user._id });
 
@@ -88,6 +87,8 @@ const resolvers = {
         ...(user.toObject() as IUser),
         accounts,
       };
+
+      const token = await generateToken(userWithAccountDetails);
 
       const response = {
         user: userWithAccountDetails,
@@ -98,7 +99,11 @@ const resolvers = {
     },
   },
   Query: {
-    async me(_: unknown, args: {}, ctx: any): Promise<IUser | null> {
+    async me(
+      _: unknown,
+      args: {},
+      ctx: any
+    ): Promise<IUserWithAccounts | null> {
       const loggedInUserId = getLoggedInUserId(ctx);
       const userId = loggedInUserId?.userId;
 
@@ -108,7 +113,14 @@ const resolvers = {
 
       const user = (await User.findById(userId)) as IUser;
 
-      return user;
+      const accounts = await Account.find({ userId: user._id });
+
+      const userWithAccountDetails: IUserWithAccounts = {
+        ...(user.toObject() as IUser),
+        accounts,
+      };
+
+      return userWithAccountDetails;
     },
   },
 };

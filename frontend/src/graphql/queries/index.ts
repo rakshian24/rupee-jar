@@ -4,8 +4,15 @@ export const GET_ME = gql`
   query {
     me {
       _id
-      username
       email
+      username
+      accounts {
+        _id
+        accountNumber
+        bankName
+        balance
+        userId
+      }
     }
   }
 `;

@@ -85,7 +85,8 @@ export const typeDefs = gql`
   input AccountInput {
     accountNumber: String!
     bankName: String!
-    balance: Float!
+    balance: String!
+    userId: ID!
   }
 
   input CategoryInput {
