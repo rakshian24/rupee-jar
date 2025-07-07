@@ -50,3 +50,5 @@ export const colors = {
   lightGreen: "#2AAC75",
   lightGreenDark: "#239963",
 };
+
+export const ISO_DATE_FORMAT = "DD-MMM-YYYY";

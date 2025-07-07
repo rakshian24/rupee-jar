@@ -51,3 +51,20 @@ export const CREATE_ACCOUNT_MUTATION = gql`
     }
   }
 `;
+
+export const CREATE_TRANSACTION = gql`
+  mutation Mutation($input: TransactionInput) {
+    createTransaction(input: $input) {
+      _id
+      userId
+      type
+      paymentMethod
+      amount
+      categoryId
+      accountId
+      description
+      receiptImageUrl
+      date
+    }
+  }
+`;
