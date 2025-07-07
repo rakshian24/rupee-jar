@@ -36,7 +36,12 @@ export const TopAppBar = () => {
     <>
       <AppBar
         position="static"
-        sx={{ backgroundColor: "#fff", color: "#000", boxShadow: "none" }}
+        sx={{
+          backgroundColor: colors.white,
+          color: colors.black,
+          boxShadow: "none",
+          zIndex: 100000,
+        }}
       >
         <Toolbar sx={{ justifyContent: "space-between" }}>
           <IconButton onClick={() => setDrawerOpen(true)}>
