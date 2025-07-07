@@ -6,6 +6,9 @@ export const emailRegex =
 
 export const NumberRegex = /^[1-9]\d*$/;
 
+export const Windows1252Regex =
+  /^(?!\s+$)[~!\s@#$%^&*()_+=[\]{}|;':",./<>?a-zA-Z0-9-]+$/;
+
 export const isRunningStandalone = () => {
   return window.matchMedia("(display-mode: standalone)").matches;
 };
@@ -36,4 +39,16 @@ export const capitalizeFirstLetter = (name: string = ""): string => {
   if (!name) return name;
 
   return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+};
+
+export const formatNumber = (
+  num: number,
+  isUSD: boolean,
+  showDecimals: boolean = true
+) => {
+  const options = showDecimals
+    ? { minimumFractionDigits: 2, maximumFractionDigits: 2 }
+    : {};
+
+  return new Intl.NumberFormat(isUSD ? "en-US" : "en-IN", options).format(num);
 };

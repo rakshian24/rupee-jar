@@ -12,6 +12,7 @@ export type ButtonProps = LoadingButtonProps & {
   startIcon?: ReactElement;
   endIcon?: ReactElement;
   dataTestId?: string;
+  priority?: "primary" | "secondary" | "tertiary";
 };
 
 const Button = ({
@@ -23,6 +24,7 @@ const Button = ({
   startIcon,
   endIcon,
   dataTestId = "SubmitBtn",
+  priority = "primary",
   ...props
 }: ButtonProps) => (
   <LoadingButton
@@ -36,6 +38,7 @@ const Button = ({
     data-testid={dataTestId}
     sx={{
       ...{
+        fontSize: "16px",
         borderRadius: 6,
         textTransform: "none",
         p: endIcon
@@ -44,15 +47,28 @@ const Button = ({
           ? "10px 24px 10px 16px"
           : "10px 24px",
         boxShadow: "none",
-        bgcolor: colors.lightGreen,
-        color: colors.white,
+        bgcolor: priority === "primary" ? colors.primary : colors.white,
+        color: priority === "primary" ? colors.white : colors.primary,
+        border:
+          priority === "secondary" ? `1px solid ${colors.primary}` : "none",
         "&:hover": {
-          bgcolor: colors.lightGreenDark,
+          bgcolor:
+            priority === "primary"
+              ? colors.lightGreen
+              : priority === "secondary"
+              ? colors.lightGrey
+              : colors.primary,
           boxShadow: "none",
+          color:
+            priority === "primary"
+              ? colors.white
+              : priority === "secondary"
+              ? colors.lightGreen
+              : colors.white,
         },
         "&:disabled": {
-          bgcolor: colors.lightGrey,
-          color: isLoading ? colors.charcoal : colors.contentSecondary,
+          bgcolor: priority === "primary" ? colors.primary : colors.white,
+          color: priority === "primary" ? colors.white : colors.primary,
           opacity: 0.6,
         },
       },

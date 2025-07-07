@@ -7,16 +7,7 @@ import React, {
   useState,
   ReactNode,
 } from "react";
-
-interface Account {
-  _id: string;
-  userId: string;
-  accountNumber: string;
-  bankName: string;
-  balance: number;
-  createdAt: string;
-  updatedAt: string;
-}
+import { Account } from "../types";
 
 export interface User {
   userId: string;

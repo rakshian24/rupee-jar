@@ -114,12 +114,13 @@ export const typeDefs = gql`
   input TransactionInput {
     type: TransactionType!
     paymentMethod: PaymentMethod!
-    amount: Float!
+    amount: String!
     categoryId: ID!
     accountId: ID!
     description: String!
     receiptImageUrl: String
     date: String!
+    userId: ID!
   }
 
   type Query {
