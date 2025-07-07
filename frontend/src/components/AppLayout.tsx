@@ -1,12 +1,45 @@
-import { Box, useMediaQuery } from "@mui/material";
-import { Outlet } from "react-router-dom";
+import {
+  Backdrop,
+  Box,
+  CircularProgress,
+  Stack,
+  useMediaQuery,
+} from "@mui/material";
+import { Outlet, useNavigate } from "react-router-dom";
 import { LeftNav } from "../components/LeftNav";
-import { colors, screenSize } from "../constants";
+import { colors, ROUTES, screenSize } from "../constants";
 import { TopAppBar } from "./TopAppBar";
 import { BottomNav } from "./BottomNav";
+import { useQuery } from "@apollo/client";
+import { GET_ME } from "../graphql/queries";
+import { useEffect } from "react";
 
 export const AppLayout = () => {
   const isTablet = useMediaQuery(`(max-width:${screenSize.tablet})`);
+  const isPcAndAbove = useMediaQuery(`(max-width:${screenSize.pc})`);
+
+  const navigate = useNavigate();
+
+  const { data, loading } = useQuery(GET_ME);
+
+  const hasAccount = !!data?.me?.accounts?.length;
+
+  useEffect(() => {
+    if (!hasAccount) {
+      navigate(ROUTES.DASHBOARD);
+    }
+  }, [hasAccount, navigate]);
+
+  if (loading) {
+    return (
+      <Backdrop
+        sx={{ color: colors.white, zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    );
+  }
 
   return (
     <Box
@@ -32,7 +65,16 @@ export const AppLayout = () => {
           mb: isTablet ? "56px" : "0px",
         }}
       >
-        <Outlet />
+        <Stack
+          sx={{
+            maxWidth: "1600px",
+            ...(isPcAndAbove && { width: "100%" }),
+            margin: isTablet ? "0" : "0 auto",
+            height: isTablet ? "auto" : "100%",
+          }}
+        >
+          <Outlet />
+        </Stack>
       </Box>
 
       {isTablet && <BottomNav />}
