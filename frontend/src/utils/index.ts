@@ -1,3 +1,5 @@
+import { ExpenseCategory, IncomeCategory } from "../types";
+
 export const textInputRegex =
   /^(?!\s+$)[~!\s@#$%^&*()_+=[\]{}|;':",./<>?a-zA-Z0-9-]+$/;
 
@@ -51,4 +53,19 @@ export const formatNumber = (
     : {};
 
   return new Intl.NumberFormat(isUSD ? "en-US" : "en-IN", options).format(num);
+};
+
+export const getCategoryName = (
+  selectedCategoryId: string,
+  isSelectedTypeIncome: boolean,
+  incomeCategories: IncomeCategory[] | [],
+  expenseCategories: ExpenseCategory[] | []
+) => {
+  if (isSelectedTypeIncome) {
+    return incomeCategories.find((cat) => cat._id === selectedCategoryId)?.name;
+  }
+
+  return expenseCategories.find(
+    ({ category }) => category._id === selectedCategoryId
+  )?.category.name;
 };

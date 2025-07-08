@@ -12,12 +12,12 @@ import {
   ListItemText,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import NotificationsIcon from "@mui/icons-material/Notifications";
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { screenSize, colors, APP_NAME } from "../constants";
+import { screenSize, colors, APP_NAME, ROUTES } from "../constants";
 import logo from "../assets/pngs/logo.png";
 import useMenuItemsList from "../hooks/useMenuItems";
+import { Close } from "@mui/icons-material";
 
 export const TopAppBar = () => {
   const menuItems = useMenuItemsList();
@@ -29,6 +29,8 @@ export const TopAppBar = () => {
   const currentPath = location.pathname;
   const currentMenu = menuItems.find((item) => item.path === currentPath);
   const currentPageTitle = currentMenu?.text || "Dashboard";
+  const isCurrentPathAddTransaction =
+    location.pathname === ROUTES.ADD_TRANSACTION;
 
   if (!isTablet) return null;
 
@@ -39,8 +41,9 @@ export const TopAppBar = () => {
         sx={{
           backgroundColor: colors.white,
           color: colors.black,
-          boxShadow: "none",
+          boxShadow: "0 1px 0px rgba(0, 0, 0, 0.1)",
           zIndex: 100000,
+          borderBottom: `1px solid ${colors.grey1}`,
         }}
       >
         <Toolbar sx={{ justifyContent: "space-between" }}>
@@ -50,9 +53,13 @@ export const TopAppBar = () => {
           <Typography fontWeight={600} sx={{ color: colors.lightGreen }}>
             {currentPageTitle}
           </Typography>
-          <IconButton>
-            <NotificationsIcon />
-          </IconButton>
+          {isCurrentPathAddTransaction ? (
+            <IconButton onClick={() => navigate(ROUTES.DASHBOARD)}>
+              <Close />
+            </IconButton>
+          ) : (
+            <Box width={"24px"} />
+          )}
         </Toolbar>
       </AppBar>
 

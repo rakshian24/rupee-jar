@@ -34,7 +34,7 @@ export const typeDefs = gql`
     userId: ID!
   }
 
-  type Category {
+  type IncomeCategory {
     _id: ID!
     name: String!
     icon: String
@@ -42,12 +42,12 @@ export const typeDefs = gql`
     type: TransactionType!
     userId: ID!
     description: String
-    budgetLimit: Float!
   }
 
-  type CategoryWithBudget {
-    category: Category!
+  type ExpenseCategory {
+    category: IncomeCategory!
     budget: Budget!
+    spent: Float!
   }
 
   type Budget {
@@ -63,10 +63,10 @@ export const typeDefs = gql`
     type: TransactionType!
     paymentMethod: PaymentMethod!
     amount: Float!
-    categoryId: ID!
-    accountId: ID!
+    category: IncomeCategory
+    account: Account
     description: String!
-    receiptImageUrl: String!
+    receiptImageUrl: String
     date: DateTime!
   }
 
@@ -89,26 +89,24 @@ export const typeDefs = gql`
     userId: ID!
   }
 
-  input CategoryInput {
+  input IncomeCategoryInput {
     name: String!
     icon: String
     color: String
-    type: TransactionType!
     description: String
+  }
+
+  input ExpenseCategoryInput {
+    name: String!
+    icon: String
+    color: String
+    description: String
+    budgetLimit: String
   }
 
   input BudgetInput {
     categoryId: ID!
     limit: Float!
-  }
-
-  input CategoryWithBudgetInput {
-    name: String!
-    icon: String
-    color: String
-    type: TransactionType!
-    budgetLimit: Float!
-    description: String
   }
 
   input TransactionInput {
@@ -129,9 +127,11 @@ export const typeDefs = gql`
     getAccount(id: ID!): Account
     getAllAccounts: [Account]
 
-    getCategoryByType(id: ID!, type: TransactionType!): Category
-    getAllCategoriesByType(type: TransactionType!): [Category]
-    getAllCategoriesByTypeWithBudgetDetails(type: TransactionType!): [Category]
+    getIncomeCategory(id: ID!): IncomeCategory
+    getAllIncomeCategories: [IncomeCategory]
+
+    getExpenseCategory(id: ID!): ExpenseCategory
+    getAllExpenseCategories: [ExpenseCategory]
 
     getTransaction(id: ID!): Transaction
     getAllTransactions: [Transaction]
@@ -145,11 +145,8 @@ export const typeDefs = gql`
 
     createAccount(input: AccountInput): Account
 
-    createCategory(input: CategoryInput): Category
-
-    createCategoryWithBudget(
-      input: CategoryWithBudgetInput!
-    ): CategoryWithBudget!
+    createIncomeCategory(input: IncomeCategoryInput): IncomeCategory
+    createExpenseCategory(input: ExpenseCategoryInput): ExpenseCategory
 
     createBudget(input: BudgetInput): Budget
 

@@ -52,3 +52,71 @@ export const GET_USER = gql`
     }
   }
 `;
+
+export const GET_ALL_INCOME_CATEGORIES = gql`
+  query GetAllIncomeCategories {
+    getAllIncomeCategories {
+      _id
+      name
+      icon
+      color
+      type
+      userId
+      description
+    }
+  }
+`;
+
+export const GET_ALL_EXPENSE_CATEGORIES = gql`
+  query GetAllExpenseCategories {
+    getAllExpenseCategories {
+      budget {
+        _id
+        userId
+        categoryId
+        limit
+      }
+      category {
+        _id
+        name
+        icon
+        color
+        type
+        userId
+        description
+      }
+      spent
+    }
+  }
+`;
+
+export const GET_ALL_TRANSACTIONS = gql`
+  query GetAllTransactions {
+    getAllTransactions {
+      _id
+      userId
+      type
+      paymentMethod
+      amount
+      description
+      receiptImageUrl
+      date
+      category {
+        _id
+        name
+        icon
+        color
+        type
+        userId
+        description
+      }
+      account {
+        _id
+        accountNumber
+        bankName
+        balance
+        userId
+      }
+    }
+  }
+`;

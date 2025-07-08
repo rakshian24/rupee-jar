@@ -4,12 +4,7 @@ import React, {
   RefCallback,
   useState,
 } from "react";
-import {
-  Stack,
-  TextField,
-  TextFieldProps,
-  Typography,
-} from "@mui/material";
+import { Stack, TextField, TextFieldProps, Typography } from "@mui/material";
 import { InputAdornment } from "@mui/material";
 import { IconButton } from "@mui/material";
 import { InputBaseComponentProps } from "@mui/material";
@@ -25,6 +20,7 @@ export type CustomInputProps = TextFieldProps & {
   endIcon?: ReactElement;
   dataTestId?: string;
   inputProps?: InputBaseComponentProps;
+  textFieldInputSx?: any;
 };
 
 const CustomInput = React.forwardRef<HTMLElement, CustomInputProps>(
@@ -43,6 +39,7 @@ const CustomInput = React.forwardRef<HTMLElement, CustomInputProps>(
       error,
       InputProps,
       sx,
+      textFieldInputSx,
       ...props
     },
     ref
@@ -68,6 +65,7 @@ const CustomInput = React.forwardRef<HTMLElement, CustomInputProps>(
                 padding: 0,
                 opacity: 1,
               },
+              ...textFieldInputSx,
             },
             ...sx,
           }}
