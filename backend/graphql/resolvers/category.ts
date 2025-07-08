@@ -1,35 +1,33 @@
 import { ApolloError } from "apollo-server-errors";
-import moment from "moment";
 import getLoggedInUserId from "../../middleware/getLoggedInUserId";
-import { TransactionType } from "../../models/Transaction";
+import Transaction, { TransactionType } from "../../models/Transaction";
 import Category, { ICategory } from "../../models/Category";
 import mongoose from "mongoose";
 import Budget, { IBudget } from "../../models/Budget";
+import dayjs from "dayjs";
 
-interface CategoryInput {
+interface IncomeCategoryInput {
   name: string;
   icon: string;
   description: string;
   color: number;
-  type: TransactionType;
 }
 
-interface CategoryWithBudgetInput {
+interface ExpenseCategoryInput {
   name: string;
   icon?: string;
   color?: string;
-  type: string;
   budgetLimit: number;
   description?: string;
 }
 
 const resolvers = {
   Mutation: {
-    async createCategory(
+    async createIncomeCategory(
       _: unknown,
       {
-        input: { name, icon, color, type, description },
-      }: { input: CategoryInput },
+        input: { name, icon, color, description },
+      }: { input: IncomeCategoryInput },
       ctx: any
     ): Promise<ICategory> {
       const loggedInUserId = getLoggedInUserId(ctx);
@@ -52,7 +50,7 @@ const resolvers = {
         name,
         icon,
         color,
-        type,
+        type: TransactionType.INCOME,
         description,
         userId,
       });
@@ -61,9 +59,9 @@ const resolvers = {
       return res;
     },
 
-    async createCategoryWithBudget(
+    async createExpenseCategory(
       _: unknown,
-      { input }: { input: CategoryWithBudgetInput },
+      { input }: { input: ExpenseCategoryInput },
       ctx: any
     ): Promise<{ category: ICategory; budget: IBudget | null }> {
       const loggedInUserId = getLoggedInUserId(ctx);
@@ -73,7 +71,7 @@ const resolvers = {
         throw new ApolloError("User not authenticated", "NOT_AUTHENTICATED");
       }
 
-      const { name, icon, color, type, budgetLimit, description } = input;
+      const { name, icon, color, budgetLimit, description } = input;
 
       const categoryExists = await Category.findOne({ name, userId });
 
@@ -89,7 +87,7 @@ const resolvers = {
         name,
         icon,
         color,
-        type,
+        type: TransactionType.EXPENSE,
         description: description
           ? description
           : `Created the ${name} category with a budget of ₹${budgetLimit}.`,
@@ -98,6 +96,7 @@ const resolvers = {
       const savedCategory = await newCategory.save();
 
       let savedBudget: IBudget | null = null;
+
       if (budgetLimit && budgetLimit > 0) {
         const budget = new Budget({
           userId,
@@ -114,9 +113,9 @@ const resolvers = {
     },
   },
   Query: {
-    async getCategoryByType(
+    async getIncomeCategory(
       _: unknown,
-      args: { id: string; type: TransactionType },
+      args: { id: string },
       ctx: any
     ): Promise<ICategory | null> {
       const loggedInUserId = getLoggedInUserId(ctx);
@@ -129,7 +128,7 @@ const resolvers = {
       const category = (await Category.findOne({
         id: args.id,
         userId,
-        type: args.type,
+        type: TransactionType.INCOME,
       })) as ICategory;
 
       if (!category) {
@@ -139,9 +138,9 @@ const resolvers = {
       return category;
     },
 
-    async getAllCategoriesByType(
+    async getAllIncomeCategories(
       _: unknown,
-      args: { type: TransactionType },
+      args: {},
       ctx: any
     ): Promise<ICategory[] | null> {
       const loggedInUserId = getLoggedInUserId(ctx);
@@ -151,7 +150,10 @@ const resolvers = {
         throw new ApolloError("User not authenticated", "NOT_AUTHENTICATED");
       }
 
-      const categories = await Category.find({ userId, type: args.type });
+      const categories = await Category.find({
+        userId,
+        type: TransactionType.INCOME,
+      });
 
       const categoriesAsObjects = categories.map((category) =>
         category.toObject()
@@ -160,11 +162,11 @@ const resolvers = {
       return categoriesAsObjects;
     },
 
-    async getAllCategoriesByTypeWithBudgetDetails(
+    async getExpenseCategory(
       _: unknown,
-      args: { type: TransactionType },
+      args: { id: string },
       ctx: any
-    ): Promise<ICategory[] | null> {
+    ): Promise<{ category: ICategory; budget: IBudget | null }> {
       const loggedInUserId = getLoggedInUserId(ctx);
       const userId = loggedInUserId?.userId;
 
@@ -172,45 +174,79 @@ const resolvers = {
         throw new ApolloError("User not authenticated", "NOT_AUTHENTICATED");
       }
 
-      const categoriesWithBudgets = await Category.aggregate([
-        {
-          $match: {
-            userId: new mongoose.Types.ObjectId(userId),
-            type: args.type,
+      const category = (await Category.findOne({
+        id: args.id,
+        userId,
+        type: TransactionType.EXPENSE,
+      })) as ICategory;
+
+      if (!category) {
+        throw new ApolloError("Category not found", "NOT_FOUND");
+      }
+
+      const budget = await Budget.findOne({
+        userId,
+        categoryId: category._id,
+      });
+
+      return {
+        category,
+        budget: budget || null,
+      };
+    },
+
+    async getAllExpenseCategories(
+      _: unknown,
+      __: {},
+      ctx: any
+    ): Promise<
+      { category: ICategory; budget: IBudget | null; spent: number }[]
+    > {
+      const loggedInUserId = getLoggedInUserId(ctx);
+      const userId = loggedInUserId?.userId;
+
+      if (!userId) {
+        throw new ApolloError("User not authenticated", "NOT_AUTHENTICATED");
+      }
+
+      const [categories, budgets, spendings] = await Promise.all([
+        Category.find({ userId, type: TransactionType.EXPENSE }),
+        Budget.find({ userId }),
+        Transaction.aggregate([
+          {
+            $match: {
+              userId: new mongoose.Types.ObjectId(userId),
+              type: "EXPENSE",
+              date: {
+                $gte: dayjs().startOf("month").toDate(),
+                $lte: dayjs().endOf("month").toDate(),
+              },
+            },
           },
-        },
-        {
-          $lookup: {
-            from: "budgets", // name of the Budget collection (auto-pluralized)
-            localField: "_id",
-            foreignField: "categoryId",
-            as: "budget",
+          {
+            $group: {
+              _id: "$categoryId",
+              totalSpent: { $sum: "$amount" },
+            },
           },
-        },
-        {
-          $unwind: {
-            path: "$budget",
-            preserveNullAndEmptyArrays: true, // keeps categories even if no budget
-          },
-        },
-        {
-          $project: {
-            _id: 1,
-            name: 1,
-            icon: 1,
-            color: 1,
-            type: 1,
-            userId: 1,
-            createdAt: 1,
-            updatedAt: 1,
-            budgetLimit: "$budget.limit", // flatten
-          },
-        },
+        ]),
       ]);
 
-      console.log("categoriesWithBudgets. = ", categoriesWithBudgets);
+      const budgetMap = new Map<string, IBudget>();
+      budgets.forEach((b) => budgetMap.set(b.categoryId.toString(), b));
 
-      return categoriesWithBudgets;
+      const spendingMap = new Map<string, number>();
+      spendings.forEach((s) => spendingMap.set(s._id.toString(), s.totalSpent));
+
+      return categories.map((cat) => {
+        const categoryId = cat._id.toString();
+
+        return {
+          category: cat,
+          budget: budgetMap.get(categoryId) || null,
+          spent: spendingMap.get(categoryId) || 0,
+        };
+      });
     },
   },
 };

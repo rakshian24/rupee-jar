@@ -60,11 +60,25 @@ export const CREATE_TRANSACTION = gql`
       type
       paymentMethod
       amount
-      categoryId
-      accountId
       description
       receiptImageUrl
       date
+      category {
+        _id
+        name
+        icon
+        color
+        type
+        userId
+        description
+      }
+      account {
+        _id
+        accountNumber
+        bankName
+        balance
+        userId
+      }
     }
   }
 `;

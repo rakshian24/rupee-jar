@@ -7,6 +7,7 @@ import Transaction, {
 } from "../../models/Transaction";
 import { Types } from "mongoose";
 import Category from "../../models/Category";
+import Account from "../../models/Account";
 
 interface TransactionInput {
   type: TransactionType;
@@ -57,6 +58,26 @@ const resolvers = {
         );
       }
 
+      const account = await Account.findOne({ _id: accountId, userId });
+
+      if (!account) {
+        throw new ApolloError("Account not found", "ACCOUNT_NOT_FOUND");
+      }
+
+      // Update balance
+      const numericAmount = Number(amount);
+      if (type === "INCOME") {
+        account.balance += numericAmount;
+      } else if (type === "EXPENSE") {
+        if (numericAmount > account.balance) {
+          throw new ApolloError("Insufficient balance", "INSUFFICIENT_BALANCE");
+        }
+        account.balance -= numericAmount;
+      }
+
+      // Save updated account first
+      await account.save();
+
       const newTransaction = new Transaction({
         type,
         amount,
@@ -69,8 +90,20 @@ const resolvers = {
         userId,
       });
 
-      const res = (await newTransaction.save()) as ITransaction;
-      return res;
+      const savedTransaction = await newTransaction.save();
+
+      const populated = await Transaction.findById(savedTransaction._id)
+        .populate("categoryId")
+        .populate("accountId")
+        .lean();
+
+      return {
+        ...populated,
+        category: populated?.categoryId,
+        account: populated?.accountId,
+        categoryId: undefined,
+        accountId: undefined,
+      } as unknown as ITransaction;
     },
   },
   Query: {
@@ -86,16 +119,25 @@ const resolvers = {
         throw new ApolloError("User not authenticated", "NOT_AUTHENTICATED");
       }
 
-      const transaction = (await Transaction.findOne({
-        id: args.id,
+      const transaction = await Transaction.findOne({
+        _id: args.id,
         userId,
-      })) as ITransaction;
+      })
+        .populate("categoryId")
+        .populate("accountId")
+        .lean();
 
       if (!transaction) {
-        throw new ApolloError("Account not found", "NOT_FOUND");
+        throw new ApolloError("Transaction not found", "NOT_FOUND");
       }
 
-      return transaction;
+      return {
+        ...transaction,
+        category: transaction.categoryId,
+        account: transaction.accountId,
+        categoryId: undefined,
+        accountId: undefined,
+      } as unknown as ITransaction;
     },
 
     async getAllTransactions(
@@ -113,13 +155,20 @@ const resolvers = {
       const transactions = await Transaction.find({ userId })
         .sort({ date: -1 })
         .populate("categoryId")
-        .populate("accountId");
+        .populate("accountId")
+        .lean();
 
-      const transactionsAsObjects = transactions.map((transaction) =>
-        transaction.toObject()
-      ) as ITransaction[];
+      const renamedTransactions = transactions.map((t) => {
+        return {
+          ...t,
+          category: t.categoryId,
+          account: t.accountId,
+          categoryId: undefined,
+          accountId: undefined,
+        };
+      });
 
-      return transactionsAsObjects;
+      return renamedTransactions as unknown as ITransaction[];
     },
   },
 };

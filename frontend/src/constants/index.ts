@@ -49,6 +49,9 @@ export const colors = {
   lightGrey1: "#f8f9fa",
   lightGreen: "#2AAC75",
   lightGreenDark: "#239963",
+  lightRed1: "#FEE2E2",
 };
 
 export const ISO_DATE_FORMAT = "DD-MMM-YYYY";
+
+export const INDIAN_RUPEE_SYMBOL = "₹";

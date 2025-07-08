@@ -10,14 +10,14 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./pages/dashboard";
 import Profile from "./pages/profile";
 import { AppLayout } from "./components/AppLayout";
-import AddTransaction from "./pages/addTransaction";
 import TransactionHistory from "./pages/transactionHistory";
 import Categories from "./pages/categories";
 import Reports from "./pages/reports";
 import Settings from "./pages/settings";
+import AddTransaction from "./pages/addTransaction";
 
 function App() {
-  const { user, isLoggedIn } = useAuth();
+  const { isLoggedIn } = useAuth();
   const isTablet = useMediaQuery(`(max-width:${screenSize.tablet})`);
 
   return (
